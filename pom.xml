@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>a2-Server</groupId>
+  <groupId>assignment2</groupId>
   <artifactId>a2-Server</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
@@ -40,7 +40,7 @@
         <configuration>
           <scanIntervalSeconds>10</scanIntervalSeconds>
           <webApp>
-            <contextPath>/webapp</contextPath>
+            <contextPath>/resthome4logs</contextPath>
           </webApp>
         </configuration>
       </plugin>

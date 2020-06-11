@@ -5,12 +5,12 @@
    http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
 
     <servlet>
-        <servlet-name>UserAgentServlet</servlet-name>
+        <servlet-name>LogServlet</servlet-name>
         <servlet-class>nz.ac.vuw.swen301.a2.server.LogsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UserAgentServlet</servlet-name>
-        <url-pattern>/whatsyourbrowser</url-pattern>
+        <servlet-name>LogServlet</servlet-name>
+        <url-pattern>/logs</url-pattern>
     </servlet-mapping>
 
 </web-app>
