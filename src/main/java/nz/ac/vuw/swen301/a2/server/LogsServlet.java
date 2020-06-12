@@ -1,5 +1,6 @@
 package nz.ac.vuw.swen301.a2.server;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -11,55 +12,52 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class LogsServlet extends HttpServlet {
 
-    private ArrayList list = new ArrayList();
+    private ArrayList<JSONLayout> list = new ArrayList<JSONLayout>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
+
         String limitReq = req.getParameter("limit");
         String levelReq = req.getParameter("level");
 
-        JsonObject jsonObject = null;
+        JSONLayout obj = null;
+        PrintWriter out = resp.getWriter();
+        Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
 
-        try{
-        int limit = Integer.parseInt(limitReq);
+        //Implements checks for parameters
 
-        for (int i = 0; i < limit; i++){
-            if(list.size() >= limit) {
-                Object s = list.get(i);
-                StringBuffer sb = new StringBuffer();
-                String cl = null;
-                BufferedReader reader = req.getReader();
-                while((cl = reader.readLine()) != null){
-                    sb.append(cl);
-                }
-                jsonObject = JsonParser.parseString(sb.toString()).getAsJsonObject();
-            }
-        }
-        } catch (NumberFormatException x){
+        try {
+            int limit = Integer.parseInt(limitReq);
+            if (limit < 1 || limit > 42) resp.sendError(400);
+            out.println(gson.toJson(list));
+
+        } catch (NumberFormatException x) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        resp.setContentType("text/html");
-        //resp.setContentType("plain/text");
-        PrintWriter out = resp.getWriter();
-        out.println("<html>");
-        out.println("<body>");
-        out.println("Search Query: <br>"
-                + "limit: " + limitReq + "<br>"
-                + "level: " + levelReq + "<br>");
-        //out.println("<br> Matching Logs: " + jsonObject.toString());
-        out.println("</body>");
-        out.println("</html>");
-        //out.close();
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        list.add(req.getReader());
+        //Formatting and creation of JSON object
+        Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        JSONLayout jsonObject = gson.fromJson((req.getReader().lines().collect(Collectors.joining())), JSONLayout.class);
+        //Add json class from assignment 1 then check input is correct:
+        //Date format and ID format matches the structure in the swagger hub and strings
+        list.add(jsonObject);
+
+        //Printing
+        PrintWriter out = resp.getWriter();
+        out.println(gson.toJson(list));
     }
 }
