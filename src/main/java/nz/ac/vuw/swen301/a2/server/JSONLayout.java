@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 
 //
 import org.apache.log4j.Layout;
-import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
 
 //Hashmap for keystorage
@@ -19,6 +18,10 @@ public class JSONLayout extends Layout {
 
     public JSONLayout() {
 
+    }
+
+    public JSONLayout(String id){
+        this.id = id;
     }
 
     public JSONLayout(String id, String message, String timestamp, String thread, String logger, String level, String errorDetails) {
