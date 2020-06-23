@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestGetLogs.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">assignment2p1$test_nz_ac_vuw_swen301_a2_server_in_a2_Server.exec</a> &gt; <a href="index.source.html" class="el_package">test.nz.ac.vuw.swen301.a2.server</a> &gt; <span class="el_source">TestGetLogs.java</span></div><h1>TestGetLogs.java</h1><pre class="source lang-java linenums">package test.nz.ac.vuw.swen301.a2.server;
+
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import nz.ac.vuw.swen301.a2.server.JSONLayout;
+import nz.ac.vuw.swen301.a2.server.LogsServlet;
+import org.junit.Test;
+
+import junit.framework.TestCase;
+
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+
+import javax.servlet.ServletException;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.UUID;
+
+
+<span class="fc" id="L23">public class TestGetLogs extends TestCase {</span>
+
+<span class="fc" id="L25">    private ArrayList&lt;String&gt; LEVELS = new ArrayList&lt;&gt;(Arrays.asList(&quot;ALL&quot;,&quot;TRACE&quot;,&quot;DEBUG&quot;,&quot;INFO&quot;,&quot;WARN&quot;,&quot;ERROR&quot;,&quot;FATAL&quot;,&quot;OFF&quot;));</span>
+
+    //different values - return size - logging levels
+    @Test
+    public void testInValidLimitParameterToSmall() throws IOException, ServletException {
+<span class="fc" id="L30">        MockHttpServletRequest request = new MockHttpServletRequest();</span>
+<span class="fc" id="L31">        MockHttpServletResponse response = new MockHttpServletResponse();</span>
+<span class="fc" id="L32">        request.setParameter(&quot;limit&quot;, &quot;-5&quot;);</span>
+<span class="fc" id="L33">        request.setParameter(&quot;level&quot;, &quot;ALL&quot;);</span>
+<span class="fc" id="L34">        LogsServlet service = new LogsServlet();</span>
+<span class="fc" id="L35">        ArrayList&lt;JSONLayout&gt; list = generateList(1);</span>
+<span class="fc" id="L36">        service.setList(list);</span>
+<span class="fc" id="L37">        service.doGet(request, response);</span>
+<span class="fc" id="L38">        assertEquals(400, response.getStatus());</span>
+<span class="fc" id="L39">    }</span>
+
+    @Test
+    public void testInValidLimitParameterToBig() throws IOException, ServletException {
+<span class="fc" id="L43">        MockHttpServletRequest request = new MockHttpServletRequest();</span>
+<span class="fc" id="L44">        MockHttpServletResponse response = new MockHttpServletResponse();</span>
+<span class="fc" id="L45">        request.setParameter(&quot;limit&quot;, &quot;80&quot;);</span>
+<span class="fc" id="L46">        request.setParameter(&quot;level&quot;, &quot;ALL&quot;);</span>
+<span class="fc" id="L47">        LogsServlet service = new LogsServlet();</span>
+<span class="fc" id="L48">        ArrayList&lt;JSONLayout&gt; list = generateList(1);</span>
+<span class="fc" id="L49">        service.setList(list);</span>
+<span class="fc" id="L50">        service.doGet(request, response);</span>
+<span class="fc" id="L51">        assertEquals(400, response.getStatus());</span>
+<span class="fc" id="L52">    }</span>
+
+    @Test
+    public void testInValidLevelParameter() throws IOException, ServletException {
+<span class="fc" id="L56">        MockHttpServletRequest request = new MockHttpServletRequest();</span>
+<span class="fc" id="L57">        MockHttpServletResponse response = new MockHttpServletResponse();</span>
+<span class="fc" id="L58">        request.setParameter(&quot;limit&quot;, &quot;2&quot;);</span>
+<span class="fc" id="L59">        request.setParameter(&quot;level&quot;, &quot;invalidlol&quot;);</span>
+<span class="fc" id="L60">        LogsServlet service = new LogsServlet();</span>
+<span class="fc" id="L61">        ArrayList&lt;JSONLayout&gt; list = generateList(1);</span>
+<span class="fc" id="L62">        service.setList(list);</span>
+<span class="fc" id="L63">        service.doGet(request, response);</span>
+<span class="fc" id="L64">        assertEquals(400, response.getStatus());</span>
+<span class="fc" id="L65">    }</span>
+
+    @Test
+    public void testInValidParameterNames() throws IOException, ServletException {
+<span class="fc" id="L69">        MockHttpServletRequest request = new MockHttpServletRequest();</span>
+<span class="fc" id="L70">        MockHttpServletResponse response = new MockHttpServletResponse();</span>
+<span class="fc" id="L71">        request.setParameter(&quot;invalidlol&quot;, &quot;2&quot;);</span>
+<span class="fc" id="L72">        request.setParameter(&quot;level&quot;, &quot;ALL&quot;);</span>
+<span class="fc" id="L73">        LogsServlet service = new LogsServlet();</span>
+<span class="fc" id="L74">        ArrayList&lt;JSONLayout&gt; list = generateList(1);</span>
+<span class="fc" id="L75">        service.setList(list);</span>
+<span class="fc" id="L76">        service.doGet(request, response);</span>
+<span class="fc" id="L77">        assertEquals(400, response.getStatus());</span>
+<span class="fc" id="L78">    }</span>
+
+    @Test
+    public void testInValidParameterNames2() throws IOException, ServletException {
+<span class="fc" id="L82">        MockHttpServletRequest request = new MockHttpServletRequest();</span>
+<span class="fc" id="L83">        MockHttpServletResponse response = new MockHttpServletResponse();</span>
+<span class="fc" id="L84">        request.setParameter(&quot;limit&quot;, &quot;2&quot;);</span>
+<span class="fc" id="L85">        request.setParameter(&quot;invalidlol&quot;, &quot;ALL&quot;);</span>
+<span class="fc" id="L86">        LogsServlet service = new LogsServlet();</span>
+<span class="fc" id="L87">        ArrayList&lt;JSONLayout&gt; list = generateList(1);</span>
+<span class="fc" id="L88">        service.setList(list);</span>
+<span class="fc" id="L89">        service.doGet(request, response);</span>
+<span class="fc" id="L90">        assertEquals(400, response.getStatus());</span>
+<span class="fc" id="L91">    }</span>
+
+    @Test
+    public void testMissingParameters() throws IOException, ServletException {
+<span class="fc" id="L95">        MockHttpServletRequest request = new MockHttpServletRequest();</span>
+<span class="fc" id="L96">        MockHttpServletResponse response = new MockHttpServletResponse();</span>
+<span class="fc" id="L97">        LogsServlet service = new LogsServlet();</span>
+<span class="fc" id="L98">        ArrayList&lt;JSONLayout&gt; list = generateList(1);</span>
+<span class="fc" id="L99">        service.setList(list);</span>
+<span class="fc" id="L100">        service.doGet(request, response);</span>
+<span class="fc" id="L101">        assertEquals(400, response.getStatus());</span>
+<span class="fc" id="L102">    }</span>
+
+    @Test
+    public void testValidRequestResponse() throws IOException, ServletException {
+<span class="fc" id="L106">        MockHttpServletRequest request = new MockHttpServletRequest();</span>
+<span class="fc" id="L107">        MockHttpServletResponse response = new MockHttpServletResponse();</span>
+<span class="fc" id="L108">        request.setParameter(&quot;limit&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L109">        request.setParameter(&quot;level&quot;, &quot;ALL&quot;);</span>
+<span class="fc" id="L110">        LogsServlet service = new LogsServlet();</span>
+<span class="fc" id="L111">        ArrayList&lt;JSONLayout&gt; list = generateList(1);</span>
+<span class="fc" id="L112">        service.setList(list);</span>
+<span class="fc" id="L113">        service.doGet(request, response);</span>
+<span class="fc" id="L114">        Gson gson = new Gson().newBuilder().setPrettyPrinting().create();</span>
+<span class="fc" id="L115">        assertEquals(gson.toJson(list), response.getContentAsString().trim());</span>
+<span class="fc" id="L116">    }</span>
+
+    @Test
+    public void testValidManyRequestResponse() throws IOException, ServletException {
+<span class="fc" id="L120">        MockHttpServletRequest request = new MockHttpServletRequest();</span>
+<span class="fc" id="L121">        MockHttpServletResponse response = new MockHttpServletResponse();</span>
+<span class="fc" id="L122">        request.setParameter(&quot;limit&quot;, &quot;10&quot;);</span>
+<span class="fc" id="L123">        request.setParameter(&quot;level&quot;, &quot;ALL&quot;);</span>
+<span class="fc" id="L124">        LogsServlet service = new LogsServlet();</span>
+<span class="fc" id="L125">        ArrayList&lt;JSONLayout&gt; list = generateList(10);</span>
+<span class="fc" id="L126">        service.setList(list);</span>
+<span class="fc" id="L127">        service.doGet(request, response);</span>
+<span class="fc" id="L128">        Gson gson = new Gson().newBuilder().setPrettyPrinting().create();</span>
+<span class="fc" id="L129">        assertEquals(gson.toJson(list), response.getContentAsString().trim());</span>
+<span class="fc" id="L130">    }</span>
+
+    @Test
+    public void testValidLimitLargerThanSize() throws IOException, ServletException {
+<span class="fc" id="L134">        MockHttpServletRequest request = new MockHttpServletRequest();</span>
+<span class="fc" id="L135">        MockHttpServletResponse response = new MockHttpServletResponse();</span>
+<span class="fc" id="L136">        request.setParameter(&quot;limit&quot;, &quot;20&quot;);</span>
+<span class="fc" id="L137">        request.setParameter(&quot;level&quot;, &quot;ALL&quot;);</span>
+<span class="fc" id="L138">        LogsServlet service = new LogsServlet();</span>
+<span class="fc" id="L139">        ArrayList&lt;JSONLayout&gt; list = generateList(10);</span>
+<span class="fc" id="L140">        service.setList(list);</span>
+<span class="fc" id="L141">        service.doGet(request, response);</span>
+<span class="fc" id="L142">        Gson gson = new Gson().newBuilder().setPrettyPrinting().create();</span>
+<span class="fc" id="L143">        assertEquals(gson.toJson(list), response.getContentAsString().trim());</span>
+<span class="fc" id="L144">    }</span>
+
+    public ArrayList&lt;JSONLayout&gt; generateList(int size){
+<span class="fc" id="L147">        ArrayList&lt;JSONLayout&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        for(int i = 0; i &lt; size; i++) {</span>
+<span class="fc" id="L149">            JSONLayout json1 = new JSONLayout(</span>
+<span class="fc" id="L150">                    UUID.randomUUID().toString(),</span>
+                    &quot;application started&quot;,
+                    &quot;2019-07-29T09:12:33.001Z&quot;,
+                    &quot;main&quot;,
+                    &quot;com.example.Foo&quot;,
+                    &quot;WARN&quot;,
+                    &quot;string&quot;
+            );
+<span class="fc" id="L158">            list.add(json1);</span>
+        }
+<span class="fc" id="L160">        return list;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
