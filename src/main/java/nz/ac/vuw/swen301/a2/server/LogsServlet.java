@@ -1,7 +1,6 @@
 package nz.ac.vuw.swen301.a2.server;
 
 import com.google.gson.Gson;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,12 +12,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LogsServlet extends HttpServlet {
 
-    private ArrayList<JSONLayout> list = new ArrayList<JSONLayout>();
+    private static ArrayList<JSONLayout> list = new ArrayList<JSONLayout>();
     private static final ArrayList<String> LEVELS = new ArrayList<>(Arrays.asList("ALL","TRACE","DEBUG","INFO","WARN","ERROR","FATAL","OFF"));
 
     //Default constructor
@@ -125,6 +125,44 @@ public class LogsServlet extends HttpServlet {
         //Printing
         PrintWriter out = resp.getWriter();
         out.println(gson.toJson(list));
+    }
+
+    public static HashMap<String, HashMap<String,Integer>> getTable(){
+        HashMap<String, HashMap<String,Integer>> table = new HashMap<>();
+
+        list.sort((d1,d2) -> d2.getTimestamp().compareTo(d1.getTimestamp()));
+
+        List<String> keys = list
+                .stream()
+                .map(logEvent -> logEvent.getLogger()).collect(Collectors.toList());
+        keys.addAll(list
+                .stream()
+                .map(logEvent -> logEvent.getLevel()).collect(Collectors.toList()));
+        keys.addAll(list
+                .stream()
+                .map(logEvent -> logEvent.getThread()).collect(Collectors.toList()));
+        List<String> datesToAdd = list
+                .stream()
+                .map(logEvent -> logEvent.getTimestamp().substring(0,10)).collect(Collectors.toList());
+        for(String key : keys){
+            HashMap<String,Integer> dates = new HashMap<>();
+            for(String date : datesToAdd){
+                dates.put(date,0);
+            }
+            table.put(key,dates);
+        }
+
+        for(JSONLayout log : list){
+            String date = log.getTimestamp().substring(0,10);
+            String logger = log.getLogger();
+            String level = log.getLevel();
+            String thread = log.getThread();
+            table.get(logger).put(date,table.get(logger).get(date)+1);
+            table.get(level).put(date,table.get(level).get(date)+1);
+            table.get(thread).put(date,table.get(thread).get(date)+1);
+        }
+        System.out.print(table + "\n");
+        return table;
     }
 
     public boolean validUUID(String uuid) {

@@ -13,4 +13,22 @@
         <url-pattern>/logs</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>StatsServlet</servlet-name>
+        <servlet-class>nz.ac.vuw.swen301.a2.server.StatsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StatsServlet</servlet-name>
+        <url-pattern>/stats</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>StatsXLSServlet</servlet-name>
+        <servlet-class>nz.ac.vuw.swen301.a2.server.StatsXLSServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StatsXLSServlet</servlet-name>
+        <url-pattern>/statsxls</url-pattern>
+    </servlet-mapping>
+
 </web-app>
