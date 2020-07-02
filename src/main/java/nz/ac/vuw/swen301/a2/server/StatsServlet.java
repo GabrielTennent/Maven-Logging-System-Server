@@ -51,6 +51,9 @@ public class StatsServlet extends HttpServlet{
                 out.println("</tr>");
             }
             out.println("</html></body>");
+        } else {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
     }
 }

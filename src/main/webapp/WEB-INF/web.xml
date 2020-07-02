@@ -31,4 +31,22 @@
         <url-pattern>/statsxls</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>StatsCSVServlet</servlet-name>
+        <servlet-class>nz.ac.vuw.swen301.a2.server.StatsCSVServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StatsCSVServlet</servlet-name>
+        <url-pattern>/statscsv</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>StatsPNGServlet</servlet-name>
+        <servlet-class>nz.ac.vuw.swen301.a2.server.StatsPNGServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StatsPNGServlet</servlet-name>
+        <url-pattern>/statspng</url-pattern>
+    </servlet-mapping>
+
 </web-app>

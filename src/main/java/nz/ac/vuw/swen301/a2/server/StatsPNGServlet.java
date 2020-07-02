@@ -1,4 +1,10 @@
 package nz.ac.vuw.swen301.a2.server;
 
-public class StatsPNGServlet {
+import javax.servlet.http.HttpServlet;
+
+public class StatsPNGServlet extends HttpServlet {
+
+    
+
+
 }

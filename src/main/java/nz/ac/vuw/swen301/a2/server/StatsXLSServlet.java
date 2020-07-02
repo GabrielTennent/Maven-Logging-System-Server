@@ -20,7 +20,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.util.IOUtils;
 
-public class StatsXLSServlet extends LogsServlet {
+public class StatsXLSServlet extends HttpServlet {
 
     public StatsXLSServlet(){
 
@@ -62,6 +62,9 @@ public class StatsXLSServlet extends LogsServlet {
 
             workbook.write(resp.getOutputStream());
             workbook.close();
+        } else {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
     }
 }
