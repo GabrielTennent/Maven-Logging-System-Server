@@ -38,7 +38,7 @@ public class StatsXLSServlet extends HttpServlet {
             Sheet sheet = workbook.createSheet("Java Books");
 
             int rowCount = 0;
-            Row row = sheet.createRow(0);
+            Row row = sheet.createRow(++rowCount);
 
             int columnCount = 0;
             Map.Entry<String, HashMap<String, Integer>> entry = table.entrySet().iterator().next();
